@@ -8553,7 +8553,7 @@ if true then
                 lastIdleTick = os.time()
               end
 
-              local tbl11 = {GRAB = true, GRAB_DISTANCE = 350, BRING_LIMIT = 4, BRING_FOLLOW_DISTANCE = 45, MAX_ATTACK_DURATION = 3, MAX_ATTACK_DURATION_2 = 30, LEVITATE_TIME = 1, CurrentIndex = 1, FixedAnchors = {}, BringSessions = {}}
+              local tbl11 = {GRAB = true, GRAB_DISTANCE = 350, BRING_LIMIT = 6, BRING_FOLLOW_DISTANCE = 45, MAX_ATTACK_DURATION = 3, MAX_ATTACK_DURATION_2 = 30, LEVITATE_TIME = 1, CurrentIndex = 1, FixedAnchors = {}, BringSessions = {}}
               tbl11.SpecialClusterMobs = ScriptStorage.SpecialClusterMobs or {["Dangerous Prisoner"] = true, Gladiator = true, Raider = true, Mercenary = true}
               CombatController = tbl11
               CombatController.Special1 = CombatController.SpecialClusterMobs
@@ -8781,16 +8781,7 @@ if true then
               end
 
               CombatController.CanGrabRoot = function(arg)
-                if arg then
-                  local v17 = isnetworkowner
-                  local flag6 = not v17
-                  if v17 then
-                    return (isnetworkowner(arg))
-                  end
-                  return flag6
-                end
-
-                return arg
+                return arg ~= nil and arg:IsA("BasePart")
               end
 
               CombatController.GetSpawnAnchor = function(arg)
@@ -8953,157 +8944,11 @@ if true then
               end
 
               CombatController.GetAttackOffset = function(arg)
-                if not CombatController.IsRaidActive() then
-                  local y, n8
-
-                  if not arg then
-                    if _G.SafeMode ~= false then
-                      if arg then
-                        y = arg.Position.Y
-
-                        if y then
-                          n8 = y - 35
-
-                          if fn38() then
-                            if n8 >= 4 then
-                              return CFrame.new(16, -35, 0)
-                            end
-                            return CFrame.new(16, 35, 0)
-                          end
-
-                          if n8 >= -10 then
-                            return CFrame.new(16, -35, 0)
-                          end
-                          return CFrame.new(16, 35, 0)
-                        end
-
-                        y = 100
-                        n8 = y - 35
-
-                        if fn38() then
-                          if n8 >= 4 then
-                            return CFrame.new(16, -35, 0)
-                          end
-                          return CFrame.new(16, 35, 0)
-                        end
-
-                        if n8 >= -10 then
-                          return CFrame.new(16, -35, 0)
-                        end
-                        return CFrame.new(16, 35, 0)
-                      end
-
-                      y = 100
-                      n8 = y - 35
-
-                      if fn38() then
-                        if n8 >= 4 then
-                          return CFrame.new(16, -35, 0)
-                        end
-                        return CFrame.new(16, 35, 0)
-                      end
-
-                      if n8 >= -10 then
-                        return CFrame.new(16, -35, 0)
-                      end
-                      return CFrame.new(16, 35, 0)
-                    end
-
-                    return CFrame.new(16, 35, 0)
-                  end
-
-                  if SeaIndex == 1 then
-                    if _G.SafeMode ~= false then
-                      if arg then
-                        y = arg.Position.Y
-
-                        if not y then
-                          y = 100
-                          n8 = y - 35
-
-                          if fn38() then
-                            if n8 >= 4 then
-                              return CFrame.new(16, -35, 0)
-                            end
-                            return CFrame.new(16, 35, 0)
-                          end
-
-                          if n8 >= -10 then
-                            return CFrame.new(16, -35, 0)
-                          end
-                          return CFrame.new(16, 35, 0)
-                        end
-                      else
-                        y = 100
-                      end
-
-                      n8 = y - 35
-
-                      if fn38() then
-                        if n8 >= 4 then
-                          return CFrame.new(16, -35, 0)
-                        end
-                        return CFrame.new(16, 35, 0)
-                      end
-
-                      if n8 >= -10 then
-                        return CFrame.new(16, -35, 0)
-                      end
-                      return CFrame.new(16, 35, 0)
-                    end
-
-                    return CFrame.new(16, 35, 0)
-                  end
-
-                  local position = arg.Position
-
-                  if math.abs(position.X) <= 40000 then
-                    if math.abs(position.Z) <= 40000 then
-                      if _G.SafeMode ~= false then
-                        if arg then
-                          y = arg.Position.Y
-
-                          if not y then
-                            y = 100
-                            n8 = y - 35
-
-                            if fn38() then
-                              if n8 >= 4 then
-                                return CFrame.new(16, -35, 0)
-                              end
-                              return CFrame.new(16, 35, 0)
-                            end
-
-                            if n8 >= -10 then
-                              return CFrame.new(16, -35, 0)
-                            end
-                            return CFrame.new(16, 35, 0)
-                          end
-                        else
-                          y = 100
-                        end
-
-                        n8 = y - 35
-
-                        if fn38() then
-                          if n8 >= 4 then
-                            return CFrame.new(16, -35, 0)
-                          end
-                          return CFrame.new(16, 35, 0)
-                        end
-
-                        if n8 >= -10 then
-                          return CFrame.new(16, -35, 0)
-                        end
-                        return CFrame.new(16, 35, 0)
-                      end
-
-                      return CFrame.new(16, 35, 0)
-                    end
-                  end
+                local height = _G.FarmHeight or 15
+                if CombatController.IsRaidActive() then
+                  return CFrame.new(0, math.max(height, 20), 0)
                 end
-
-                return CFrame.new(0, 35, 0)
+                return CFrame.new(0, height, 0)
               end
             end
 
@@ -9330,15 +9175,14 @@ if true then
                     table.sort(tbl10, fn37)
 
                     for _, v19 in ipairs(tbl10) do
-                      if CombatController.BRING_LIMIT <= #arg2.Mobs then
-                        return
+                      if #arg2.Mobs >= CombatController.BRING_LIMIT then
+                        break
                       else
                         local v20, v22 = CombatController.GetAliveMob(v19.Mob)
 
                         if v22 then
                           v19.Mob:SetAttribute("OldPosition", v19.Mob:GetAttribute("OldPosition") or v22.Position)
                           arg2.Mobs[#arg2.Mobs + 1] = v19.Mob
-                          return
                         end
                       end
                     end
@@ -9482,24 +9326,7 @@ if true then
                               position2 = humanoidRootPart.Position
 
                               if position2 then
-                                v17 = isnetworkowner
-                                flag6 = not v17
-
-                                if v17 then
-                                  v18 = isnetworkowner
-                                  primaryPart = child.PrimaryPart or humanoidRootPart
-
-                                  if v18(primaryPart) and ((position2 - position).Magnitude < CombatController.GRAB_DISTANCE) then
-                                    v19 = child
-                                    setAttribute = child.SetAttribute
-                                    attribute2 = child:GetAttribute("OldPosition") or position2
-                                    setAttribute(v19, "OldPosition", attribute2)
-                                    n8 = #tbl10 + 1
-                                    tbl10[n8] = {Mon = child, Root = humanoidRootPart, Humanoid = humanoid, Position = position2, Distance = (position2 - position).Magnitude}
-                                  else
-                                    continue
-                                  end
-                                elseif flag6 and ((position2 - position).Magnitude < CombatController.GRAB_DISTANCE) then
+                                if (position2 - position).Magnitude < CombatController.GRAB_DISTANCE then
                                   v19 = child
                                   setAttribute = child.SetAttribute
                                   attribute2 = child:GetAttribute("OldPosition") or position2
@@ -9517,8 +9344,6 @@ if true then
                             end
                           end
                         end
-
-                        break
                       end
 
                       if #tbl10 <= 0 then
